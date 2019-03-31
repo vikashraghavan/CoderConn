@@ -14,6 +14,6 @@
     1. Multimedia posts.
     2. To enable following a particular user.
     
-   CURRENT APP DEPLOYMENT LINK:
+   CURRENTY DEPLOYED APP LINK:
    
    https://rocky-everglades-71523.herokuapp.com/
