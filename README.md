@@ -1,4 +1,4 @@
-# Devconn
+# CoderConn
 
     This is a small social network app built with the MERN stack.
     
