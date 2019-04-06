@@ -2,65 +2,14 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 const passport = require("passport");
-const fs = require("fs");
-const Grid = require("gridfs-stream");
-const methodOverride = require("method-override");
-const multer = require("multer");
 
-const app = express();
 // Post model
 const Post = require("../../models/Post");
 // Profile model
 const Profile = require("../../models/Profile");
-const logger = require("../../config/logger");
-const db = require("../../server.js");
 
 // Validation
 const validatePostInput = require("../../validation/post");
-
-app.use(multer);
-
-const conn = mongoose.connection;
-Grid.mongo = mongoose.mongo;
-let gfs;
-
-conn.once("open", () => {
-  gfs = Grid(conn.db);
-
-  router.post("/upload", (req, res) => {
-    let { file } = req.files;
-    let writeStream = gfs.createWriteStream({
-      filename: `${file.iname}`,
-      mode: "w",
-      content_type: file.mimetype
-    });
-    writeStream.on("close", function(uploadedFile) {
-      post
-        .create({
-          doc_id: uploadedFile._id,
-          length: uploadedFile.length,
-          name: uploadedFile.filename,
-          type: uploadedFile.contentType
-        })
-        .then(file =>
-          res.json({
-            success: true,
-            message: "File was saved with success"
-          })
-        )
-        .catch(err => {
-          logger.error(
-            `[*] Error, while uploading new files, with error: ${err}`
-          );
-          res.status(500).json({
-            message: `[*] Error while uploading new files, with error: ${err}`
-          });
-        });
-    });
-    writeStream.write(file.data);
-    writeStream.end();
-  });
-});
 
 // @route   GET api/posts/test
 // @desc    Tests post route
@@ -105,7 +54,6 @@ router.post(
 
     const newPost = new Post({
       text: req.body.text,
-
       name: req.body.name,
       avatar: req.body.avatar,
       user: req.user.id
